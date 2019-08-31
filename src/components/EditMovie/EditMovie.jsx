@@ -5,7 +5,16 @@ class EditMovie extends Component {
   state = {}
 
   saveEdit = () => {
-
+    console.log('clicked save');
+    this.props.dispatch({
+      type: 'UPDATE_MOVIE',
+      payload: {
+        title: this.props.details.title,
+        description: this.props.details.description,
+        id: this.props.id,
+      }
+    });
+    this.props.history.push('/details');
   }
 
   inputChange = (event, propertyName) => {
@@ -31,7 +40,7 @@ class EditMovie extends Component {
         <input value={this.props.details.description}
           onChange={(event) => this.inputChange(event, 'description')} placeholder='Movie Description' />
         <button onClick={() => this.props.history.push('/details')}>Cancel</button>
-        <button onClick={this.saveEdit}>Save</button>
+        <button onClick={() => this.saveEdit()}>Save</button>
       </div>
     );
   }
@@ -39,7 +48,8 @@ class EditMovie extends Component {
 
 const storeToProps = (reduxStore) => {
   return {
-    details: reduxStore.currentDetails
+    details: reduxStore.currentDetails,
+    id: reduxStore.currentMovie
   }
 }
 

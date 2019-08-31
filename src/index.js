@@ -16,6 +16,7 @@ import { takeEvery, put } from "redux-saga/effects";
 function* rootSaga() {
   yield takeEvery('ADD_MOVIES', addMovies);
   yield takeEvery('GET_DETAILS', allDetails);
+  yield takeEvery('UPDATE_MOVIE', updateMovies);
 }
 
 function* addMovies(action) {
@@ -41,6 +42,18 @@ function* allDetails(action) {
         })
     } catch(error) {
         console.log('error in allDetails', error);
+    }
+}
+
+function* updateMovies(action) {
+    try {
+        yield axios.put(`/movie`, action.payload);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.id
+        })
+    } catch (error) {
+        console.log('error in updateMovies', error);
     }
 }
 

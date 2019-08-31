@@ -5,7 +5,7 @@ const router = express.Router();
 //gets full movie list from the Database for home page
 router.get('/', (req, res) => {
   console.log('GETing movies');
-  let queryText = `SELECT * FROM "movies";`;
+  let queryText = `SELECT * FROM "movies" ORDER BY "title" asc;`;
   pool.query(queryText)
     .then((result) => {
       console.log('GOT from DB');
@@ -33,6 +33,22 @@ router.get('/:id', (req, res) => {
   .catch((error) => {
     console.log('unable to get details', error);
   })
+})
+
+//updates movies table with new title and description
+router.put('/', (req, res) => {
+  console.log('UPDATEing', req.body);
+  let queryText = `UPDATE "movies" SET "title" = $1, "description" = $2
+WHERE "id" = $3;`;
+pool.query(queryText, [req.body.title, req.body.description, req.body.id])
+.then((result) => {
+  console.log('Update complete');
+  res.sendStatus(200);
+})
+.catch((error) => {
+  console.log('Update failed', error);
+  res.sendStatus(500);
+})
 })
 
 
