@@ -37,7 +37,7 @@ function* allDetails(action) {
         console.log('Details from server', response.data);
         yield put ({
             type: 'SET_DETAILS',
-            payload: response.data
+            payload: response.data[0]
         })
     } catch(error) {
         console.log('error in allDetails', error);
@@ -82,6 +82,10 @@ const currentDetails = (state = [], action) => {
     switch (action.type) {
         case 'SET_DETAILS':
             return action.payload;
+        case 'EDIT_TITLE':
+            return {...state, title: action.payload};
+        case 'EDIT_DESCRIPTION':
+            return {...state, description: action.payload};
         default:
             return state;
     }

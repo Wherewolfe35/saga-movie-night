@@ -15,14 +15,13 @@ class MovieDetails extends Component {
     console.log(this.props.currentId);
     return (
       <>
-        {this.props.currentDetails.map(detail =>
-          <div key={detail.id}>
-            <h1>{detail.title} Details <span>{detail.name}</span></h1>
-            <img src={detail.poster} alt={detail.title}/>
-            <p>{detail.description}</p>
+          <div key={this.props.currentDetails.id}>
+            <h1>{this.props.currentDetails.title} Details <span>{this.props.currentDetails.name}</span></h1>
+            <img src={this.props.currentDetails.poster} alt={this.props.currentDetails.title} />
+            <p>{this.props.currentDetails.description}</p>
           </div>
-        )}
-        <button onClick={()=>this.props.history.push('/')}>Back</button>
+        <button onClick={() => this.props.history.push('/')}>Back</button>
+        <button onClick={() => this.props.history.push('/edit')}>Edit</button>
       </>
     );
   }
