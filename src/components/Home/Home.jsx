@@ -10,14 +10,22 @@ class Home extends Component {
     })
   }
 
+  viewDetails = (id) => {
+    this.props.dispatch({
+      type: 'CURRENT_DETAIL',
+      payload: id
+    })
+    this.props.history.push('/details');
+  }
+
   render() {
     return (
       <div>
-        <p>This is home</p>
+        <h2><u>Current Movies</u></h2>
         {this.props.reduxStore.movies.map(movie =>
-          <div>
+          <div key={movie.id}>
             <h3>{movie.title}</h3>
-            <img src={movie.poster} alt={movie.title} />
+            <img src={movie.poster} alt={movie.title} onClick={()=>this.viewDetails(movie.id)}/>
             <p>{movie.description}</p>
           </div>
         )}
