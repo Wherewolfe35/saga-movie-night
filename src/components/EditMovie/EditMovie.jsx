@@ -48,7 +48,7 @@ class EditMovie extends Component {
 
 const storeToProps = (reduxStore) => {
   return {
-    details: reduxStore.currentDetails,
+    details: reduxStore.editDetails,
     id: reduxStore.currentMovie
   }
 }

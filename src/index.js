@@ -38,7 +38,7 @@ function* allDetails(action) {
         console.log('Details from server', response.data);
         yield put ({
             type: 'SET_DETAILS',
-            payload: response.data[0]
+            payload: response.data
         })
     } catch(error) {
         console.log('error in allDetails', error);
@@ -91,14 +91,24 @@ const currentMovie = (state = 0, action) => {
 }
 
 //Used to store current details for the selected movie
-const currentDetails = (state = [], action) => {
+const currentDetails = (state = '', action) => {
     switch (action.type) {
         case 'SET_DETAILS':
             return action.payload;
+        default:
+            return state;
+    }
+}
+
+//used to store edit input from edit page
+const editDetails = (state = {title: '', description: ''}, action) => {
+    switch (action.type) {
+        case 'SET_DETAILS':
+            return {title: action.payload[0].title, description: action.payload[0].description};
         case 'EDIT_TITLE':
-            return {...state, title: action.payload};
+            return { ...state, title: action.payload };
         case 'EDIT_DESCRIPTION':
-            return {...state, description: action.payload};
+            return { ...state, description: action.payload };
         default:
             return state;
     }
@@ -110,7 +120,8 @@ const storeInstance = createStore(
         movies,
         genres,
         currentMovie,
-        currentDetails
+        currentDetails,
+        editDetails
     }),
     // Add sagaMiddleware to our store
     applyMiddleware(sagaMiddleware, logger),
