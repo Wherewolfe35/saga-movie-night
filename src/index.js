@@ -18,7 +18,7 @@ function* rootSaga() {
   yield takeEvery('GET_DETAILS', allDetails);
   yield takeEvery('UPDATE_MOVIE', updateMovies);
 }
-
+//request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
     try {
         let response = yield axios.get('/movie');
@@ -31,7 +31,7 @@ function* addMovies(action) {
         console.log('error in getting movies', error);
     }
 }
-
+//request to grab selected movie details and genres and place in appropriate reducers
 function* allDetails(action) {
     try {
         let response = yield axios.get(`/movie/${action.payload}`);
@@ -44,7 +44,7 @@ function* allDetails(action) {
         console.log('error in allDetails', error);
     }
 }
-
+//request to database to update title and description
 function* updateMovies(action) {
     try {
         yield axios.put(`/movie`, action.payload);
@@ -95,24 +95,28 @@ const currentDetails = (state = '', action) => {
     switch (action.type) {
         case 'SET_DETAILS':
             return action.payload;
+        case 'EDIT_TITLE':
+            return [{ ...state[0], title: action.payload }];
+        case 'EDIT_DESCRIPTION':
+            return [{ ...state[0], description: action.payload }];
         default:
             return state;
     }
 }
 
 //used to store edit input from edit page
-const editDetails = (state = {title: '', description: ''}, action) => {
-    switch (action.type) {
-        case 'SET_DETAILS':
-            return {title: action.payload[0].title, description: action.payload[0].description};
-        case 'EDIT_TITLE':
-            return { ...state, title: action.payload };
-        case 'EDIT_DESCRIPTION':
-            return { ...state, description: action.payload };
-        default:
-            return state;
-    }
-}
+// const editDetails = (state = {title: '', description: ''}, action) => {
+//     switch (action.type) {
+//         case 'SET_DETAILS':
+//             return {title: action.payload[0].title, description: action.payload[0].description};
+//         case 'EDIT_TITLE':
+//             return { ...state, title: action.payload };
+//         case 'EDIT_DESCRIPTION':
+//             return { ...state, description: action.payload };
+//         default:
+//             return state;
+//     }
+// }
 
 // Create one store that all components can use
 const storeInstance = createStore(
@@ -121,7 +125,6 @@ const storeInstance = createStore(
         genres,
         currentMovie,
         currentDetails,
-        editDetails
     }),
     // Add sagaMiddleware to our store
     applyMiddleware(sagaMiddleware, logger),

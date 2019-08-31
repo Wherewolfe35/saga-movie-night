@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 class EditMovie extends Component {
   state = {}
 
+  //send edited title and description to redux
   saveEdit = () => {
     console.log('clicked save');
     this.props.dispatch({
@@ -16,7 +17,7 @@ class EditMovie extends Component {
     });
     this.props.history.push('/details');
   }
-
+  //update reduxStore with changes made in input field
   inputChange = (event, propertyName) => {
     if (propertyName === 'title') {
       this.props.dispatch({
@@ -48,7 +49,7 @@ class EditMovie extends Component {
 
 const storeToProps = (reduxStore) => {
   return {
-    details: reduxStore.editDetails,
+    details: reduxStore.currentDetails[0],
     id: reduxStore.currentMovie
   }
 }

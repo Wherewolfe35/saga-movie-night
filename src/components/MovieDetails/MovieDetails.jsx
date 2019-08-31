@@ -13,13 +13,15 @@ class MovieDetails extends Component {
 
   render() {
     return (
-      <>
-          {this.props.currentDetails !== '' && <div key={this.props.currentDetails[0].id}>
-          <h1>{this.props.currentDetails[0].title} Details <span>{this.props.currentDetails.map(genre => <span key={genre.name}> {genre.name}</span>)}</span></h1>
-            <img src={this.props.currentDetails[0].poster} alt={this.props.currentDetails[0].title} />
-            <p>{this.props.currentDetails[0].description}</p>
-          </div>
-          }
+      <>{/* Using conditional rendering here because the page tries to load before current details is set. 
+      I'm sure this can be fixed using saga, but not sure how*/}
+        {this.props.currentDetails !== '' && this.props.currentDetails.map(details => <div key={details.id}>
+          <h1>{details.title} Details <span>{details.genres.map(genre => <span key={genre}> {genre}</span>)}
+          </span>
+          </h1>
+          <img src={details.poster} alt={details.title} />
+          <p>{details.description}</p>
+        </div>)}
         <button onClick={() => this.props.history.push('/')}>Back</button>
         <button onClick={() => this.props.history.push('/edit')}>Edit</button>
       </>

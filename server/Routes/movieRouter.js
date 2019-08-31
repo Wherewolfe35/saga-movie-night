@@ -20,11 +20,12 @@ router.get('/', (req, res) => {
 //gets movie details for selected movie for details page
 router.get('/:id', (req, res) => {
   console.log('GETting details');
-  let queryText = `SELECT "movies".id, "movies".title, "movies".poster, "movies".description, "genres".name 
+  let queryText = `SELECT "movies".id, "movies".title, "movies".poster, "movies".description, array_agg("genres".name) AS genres 
   FROM "movies"
   JOIN "genres_movies" ON "genres_movies".movies_id = "movies".id
   JOIN "genres" ON "genres".id = "genres_movies".genres_id
-  WHERE "movies".id = $1;`;
+  WHERE "movies".id = $1
+  GROUP BY "movies".id;`;
   pool.query(queryText, [req.params.id])
   .then((result) => {
     console.log('GOT from DB');
