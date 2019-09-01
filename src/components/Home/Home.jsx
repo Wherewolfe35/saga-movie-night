@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+//material-ui
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 class Home extends Component {
   state = {}
@@ -21,14 +26,22 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <h2><u>Current Movies</u></h2>
-        {this.props.reduxStore.movies.map(movie =>
-          <div key={movie.id}>
-            <h3>{movie.title}</h3>
-            <img src={movie.poster} alt={movie.title} onClick={()=>this.viewDetails(movie.id)}/>
-            <p>{movie.description}</p>
-          </div>
-        )}
+        <div className="homeGrid">
+          <GridList>
+            <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+              <ListSubheader component="div" color='primary'>Current Movies</ListSubheader>
+            </GridListTile>
+            {this.props.reduxStore.movies.map(movie =>
+              <GridListTile key={movie.id} cols={0.5}>
+                <img src={movie.poster} alt={movie.title} onClick={() => this.viewDetails(movie.id)} />
+                <GridListTileBar
+                title={movie.title}
+                subtitle={movie.description}
+                />
+              </GridListTile>
+            )}
+          </GridList>
+        </div>
       </div>
     );
   }

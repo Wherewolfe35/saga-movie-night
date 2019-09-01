@@ -7,6 +7,7 @@ import Header from "../Header/Header";
 import MovieDetails from "../MovieDetails/MovieDetails";
 import EditMovie from "../EditMovie/EditMovie";
 
+
 class App extends Component {
   // Renders the entire app on the DOM
   render() {
