@@ -20,6 +20,7 @@ function* rootSaga() {
   yield takeEvery('ADD_GENRE', addGenre);
   yield takeEvery('DELETE_GENRE', deleteGenre);
   yield takeEvery('SEARCH_MOVIES', search);
+  yield takeEvery('NEW_GENRE', newGenre)
 }
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
@@ -36,7 +37,7 @@ function* addMovies(action) {
             payload: genreResponse.data
         })
     } catch(error) {
-        console.log('error in getting movies', error);
+        console.log('error in getting movies request', error);
     }
 }
 //request to grab selected movie details and genres and place in appropriate reducers
@@ -49,7 +50,7 @@ function* allDetails(action) {
             payload: response.data
         })
     } catch(error) {
-        console.log('error in allDetails', error);
+        console.log('error in allDetails request', error);
     }
 }
 //request to database to update title and description and then request the new information
@@ -61,23 +62,24 @@ function* updateMovies(action) {
             payload: action.payload.id
         })
     } catch (error) {
-        console.log('error in updateMovies', error);
+        console.log('error in updateMovies request', error);
     }
 }
 
 //request to add a genre to the selected move and then request updated movie details
 function* addGenre(action) {
     try {
-        yield axios.post('/genre', action.payload);
+        yield axios.post('/genre/movie', action.payload);
         yield put({
             type: 'GET_DETAILS',
             payload: action.payload.movies_id
         })
     } catch (error) {
-        console.log('error in addGenre', error);
+        console.log('error in addGenre request', error);
     }
 }
 
+//request to remove selected genre from specified movie and then request updated details
 function* deleteGenre(action) {
     try {
         yield axios.delete(`/genre/${action.payload.movies_id}/${action.payload.genres_id}`);
@@ -86,10 +88,11 @@ function* deleteGenre(action) {
             payload: action.payload.movies_id
         })
     } catch(error) {
-        console.log('error in deleteGenre', error);
+        console.log('error in deleteGenre request', error);
     }
 }
 
+//request to search movie database with specified query, q
 function* search(action) {
     try {
         let response = yield axios.get(`/movie?q=${action.payload}`);
@@ -98,7 +101,19 @@ function* search(action) {
             payload: response.data
         })
     } catch (error) {
-        console.log('error in search', error);
+        console.log('error in search request', error);
+    }
+}
+
+//request to add new movie genre to general list of genres
+function* newGenre(action){
+    try {
+        yield axios.post('/genre', action.payload);
+        yield put({
+            type: 'ADD_MOVIES',
+        });
+    } catch(error) {
+        console.log('error in newGenre request', error);
     }
 }
 
