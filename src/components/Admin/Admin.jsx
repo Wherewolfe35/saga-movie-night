@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import ClearIcon from '@material-ui/icons/Clear';
 
 class Admin extends Component {
   state = {
@@ -8,6 +9,13 @@ class Admin extends Component {
     password: '',
     genreToAdd: '',
   }
+
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'ADD_MOVIES',
+    });
+  }
+
   // on input change, state is appropriately changed
   userPassword = (event, name) => {
     this.setState({
@@ -55,6 +63,15 @@ class Admin extends Component {
     });
   }
 
+  deleteGenre = (id) => {
+    this.props.dispatch({
+      type: 'REMOVE_GENRE',
+      payload: {
+        id,
+      }
+    })
+  }
+
   render() {
     return (
       <>
@@ -73,10 +90,23 @@ class Admin extends Component {
               <input placeholder="Genre" value={this.state.genreToAdd} onChange={this.genreChange} />
               <button onClick={this.submitGenre}>Add Genre</button>
             </form>
+            <ul>
+              {this.props.genreList.map(genre =>
+                <li key={genre.id}>
+                  <ClearIcon onClick={() => this.deleteGenre(genre.id)} className="clearIcon"/> <span> </span>
+                  {genre.name}
+                </li>)}
+            </ul>
           </div>}
       </>
     );
   }
 }
 
-export default connect()(Admin);
+const storeToProps = (reduxStore) => {
+  return {
+    genreList: reduxStore.genres
+  }
+}
+
+export default connect(storeToProps)(Admin);

@@ -14,13 +14,14 @@ import { takeEvery, put } from "redux-saga/effects";
 
 // Create the rootSaga generator function
 function* rootSaga() {
-  yield takeEvery('ADD_MOVIES', addMovies);
-  yield takeEvery('GET_DETAILS', allDetails);
-  yield takeEvery('UPDATE_MOVIE', updateMovies);
-  yield takeEvery('ADD_GENRE', addGenre);
-  yield takeEvery('DELETE_GENRE', deleteGenre);
-  yield takeEvery('SEARCH_MOVIES', search);
-  yield takeEvery('NEW_GENRE', newGenre)
+    yield takeEvery('ADD_MOVIES', addMovies);
+    yield takeEvery('GET_DETAILS', allDetails);
+    yield takeEvery('UPDATE_MOVIE', updateMovies);
+    yield takeEvery('ADD_GENRE', addGenre);
+    yield takeEvery('DELETE_GENRE', deleteGenre);
+    yield takeEvery('SEARCH_MOVIES', search);
+    yield takeEvery('NEW_GENRE', newGenre);
+    yield takeEvery('REMOVE_GENRE', removeGenre);
 }
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
@@ -36,7 +37,7 @@ function* addMovies(action) {
             type: 'SET_GENRES',
             payload: genreResponse.data
         })
-    } catch(error) {
+    } catch (error) {
         console.log('error in getting movies request', error);
     }
 }
@@ -45,11 +46,11 @@ function* allDetails(action) {
     try {
         let response = yield axios.get(`/movie/${action.payload}`);
         console.log('Details from server', response.data);
-        yield put ({
+        yield put({
             type: 'SET_DETAILS',
             payload: response.data
         })
-    } catch(error) {
+    } catch (error) {
         console.log('error in allDetails request', error);
     }
 }
@@ -87,7 +88,7 @@ function* deleteGenre(action) {
             type: 'GET_DETAILS',
             payload: action.payload.movies_id
         })
-    } catch(error) {
+    } catch (error) {
         console.log('error in deleteGenre request', error);
     }
 }
@@ -106,14 +107,26 @@ function* search(action) {
 }
 
 //request to add new movie genre to general list of genres
-function* newGenre(action){
+function* newGenre(action) {
     try {
         yield axios.post('/genre', action.payload);
         yield put({
             type: 'ADD_MOVIES',
         });
-    } catch(error) {
+    } catch (error) {
         console.log('error in newGenre request', error);
+    }
+}
+
+//request to delete movie genre from general genre list
+function* removeGenre(action) {
+    try {
+        yield axios.delete(`/genre/${action.payload.id}`);
+        yield put({
+            type: 'ADD_MOVIES',
+        });
+    } catch (error) {
+        console.log('error in removeGenre request', error);
     }
 }
 
@@ -168,6 +181,6 @@ const storeInstance = createStore(
 // Pass rootSaga into our sagaMiddleware
 sagaMiddleware.run(rootSaga);
 
-ReactDOM.render(<Provider store={storeInstance}><App /></Provider>, 
+ReactDOM.render(<Provider store={storeInstance}><App /></Provider>,
     document.getElementById('root'));
 registerServiceWorker();

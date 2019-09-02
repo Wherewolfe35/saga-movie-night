@@ -32,3 +32,11 @@ body {
 .homeGrid img {
   cursor: pointer;
 }
+
+ul {
+  list-style-type: none;
+}
+
+.clearIcon {
+  cursor: pointer;
+}

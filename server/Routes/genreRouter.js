@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     .catch((error) => {
       console.log('unable to GET from genres', error);
       res.sendStatus(500)
-    })
+    });
 });
 
 router.post('/', (req, res) => {
@@ -29,8 +29,8 @@ router.post('/', (req, res) => {
     .catch((error) => {
       console.log('error in POST', error);
       res.sendStatus(500);
-    })
-})
+    });
+});
 
 router.post('/movie', (req, res) => {
   console.log('POSTing new genre to movie', req.body);
@@ -44,9 +44,10 @@ router.post('/movie', (req, res) => {
     .catch((error) => {
       console.log('error in POST', error);
       res.sendStatus(500);
-    })
-})
+    });
+});
 
+//deletes specified genre from specified movie
 router.delete('/:mid/:gid', (req, res) => {
   let movieId = req.params.mid;
   let genreId = req.params.gid;
@@ -58,9 +59,24 @@ router.delete('/:mid/:gid', (req, res) => {
       res.sendStatus(200);
     })
     .catch((error) => {
-      console.log('error in DELETE', error);
+      console.log('error in genres_movies DELETE', error);
       res.sendStatus(500);
+    });
+});
+
+//deletes specified genre from genres table
+router.delete('/:id', (req, res) => {
+  console.log('DELETEing genre from table', req.params.id);
+  let queryText = `DELETE FROM "genres" WHERE "id" = $1;`;
+  pool.query(queryText, [req.params.id])
+    .then((result) => {
+      console.log('successful DELETE to genres');
+      res.sendStatus(200);
     })
-})
+    .catch((error) => {
+      console.log('error in genres DELETE', error);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;
