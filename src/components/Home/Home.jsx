@@ -7,8 +7,6 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
 class Home extends Component {
-  state = {}
-
   componentDidMount() {
     this.props.dispatch({
       type: 'ADD_MOVIES',
@@ -16,11 +14,7 @@ class Home extends Component {
   }
 
   viewDetails = (id) => {
-    this.props.dispatch({
-      type: 'CURRENT_DETAIL',
-      payload: id
-    })
-    this.props.history.push('/details');
+    this.props.history.push(`/details/${id}`);
   }
 
   render() {

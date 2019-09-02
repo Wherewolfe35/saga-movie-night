@@ -5,8 +5,6 @@ import "./EditMovie.css"
 import { Button, TextField } from "@material-ui/core";
 
 class EditMovie extends Component {
-  state = {}
-
   //send edited title and description to redux
   saveEdit = () => {
     console.log('clicked save');
@@ -15,10 +13,10 @@ class EditMovie extends Component {
       payload: {
         title: this.props.details.title,
         description: this.props.details.description,
-        id: this.props.id,
+        id: this.props.match.params.id,
       }
     });
-    this.props.history.push('/details');
+    this.props.history.push(`/details/${this.props.match.params.id}`);
   }
   //update reduxStore with changes made in input field
   inputChange = (event, propertyName) => {
@@ -47,7 +45,7 @@ class EditMovie extends Component {
           onChange={(event) => this.inputChange(event, 'description')} placeholder='Movie Description' />
           <br /> <br />
         <Button variant="outlined" color="inherit" 
-        onClick={() => this.props.history.push('/details')}>Cancel</Button><span> </span>
+        onClick={() => this.props.history.push(`/details/${this.props.match.params.id}`)}>Cancel</Button><span> </span>
         <Button variant="outlined" color="inherit" 
         onClick={() => this.saveEdit()}>Save</Button>
       </div>

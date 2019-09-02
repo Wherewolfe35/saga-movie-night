@@ -4,16 +4,15 @@ import './MovieDetails.css';
 import { Button } from "@material-ui/core";
 
 class MovieDetails extends Component {
-  state = {}
-
   componentDidMount() {
     this.props.dispatch({
       type: 'GET_DETAILS',
-      payload: this.props.currentId
+      payload: this.props.match.params.id
     })
   }
 
   render() {
+    console.log(this.props);
     return (
       <section>{/* Using conditional rendering here because the page tries to load before current details is set. 
       I'm sure this can be fixed using saga, but not sure how*/}
@@ -23,11 +22,12 @@ class MovieDetails extends Component {
           </h1>
           <img src={details.poster} alt={details.title} />
           <p>{details.description}</p>
-        </div>)}
-        <Button variant="outlined" color="inherit" 
-        onClick={() => this.props.history.push('/')}>Back</Button> <span> </span>
-        <Button variant="outlined" color="inherit" 
-        onClick={() => this.props.history.push('/edit')}>Edit</Button>
+          <Button variant="outlined" color="inherit"
+            onClick={() => this.props.history.push('/')}>Back</Button> <span> </span>
+          <Button variant="outlined" color="inherit"
+            onClick={() => this.props.history.push(`/edit/${details.id}`)}>Edit</Button>
+        </div>
+        )}
       </section>
     );
   }
@@ -35,7 +35,6 @@ class MovieDetails extends Component {
 
 const storeToProps = (reduxStore) => {
   return {
-    currentId: reduxStore.currentMovie,
     currentDetails: reduxStore.currentDetails
   }
 }
