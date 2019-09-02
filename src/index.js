@@ -19,6 +19,7 @@ function* rootSaga() {
   yield takeEvery('UPDATE_MOVIE', updateMovies);
   yield takeEvery('ADD_GENRE', addGenre);
   yield takeEvery('DELETE_GENRE', deleteGenre);
+  yield takeEvery('SEARCH_MOVIES', search);
 }
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
@@ -86,6 +87,18 @@ function* deleteGenre(action) {
         })
     } catch(error) {
         console.log('error in deleteGenre', error);
+    }
+}
+
+function* search(action) {
+    try {
+        let response = yield axios.get(`/movie?q=${action.payload}`);
+        yield put({
+            type: 'SET_MOVIES',
+            payload: response.data
+        })
+    } catch (error) {
+        console.log('error in search', error);
     }
 }
 

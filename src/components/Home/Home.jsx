@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 //material-ui
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import { GridList, GridListTile, GridListTileBar, ListSubheader, TextField, Button } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 class Home extends Component {
+  state = {
+    search: '',
+  }
   componentDidMount() {
     this.props.dispatch({
       type: 'ADD_MOVIES',
@@ -17,9 +18,39 @@ class Home extends Component {
     this.props.history.push(`/details/${id}`);
   }
 
+  searchBar = (event) => {
+    this.setState({
+      search: event.target.value,
+    })
+  }
+
+  handleSearch = (event) => {
+    event.preventDefault();
+    this.props.dispatch({
+      type: 'SEARCH_MOVIES',
+      payload: this.state.search
+    })
+  }
+
+  clear = () => {
+    this.setState({
+      search: '',
+    })
+    this.props.dispatch({
+      type: 'ADD_MOVIES',
+    })
+  }
+
   render() {
     return (
       <div>
+        <form onSubmit={this.handleSearch}>
+          <SearchIcon />
+          <TextField variant="filled" id="filled-search" placeholder="Search" className="searchBar"
+            onChange={this.searchBar} value={this.state.search} /> <span> </span>
+          <Button variant="outlined" color="inherit" type="submit">Search</Button> <span> </span>
+          <Button variant="outlined" color="inherit" onClick={this.clear}>Clear Search</Button>
+        </form>
         <div className="homeGrid">
           <GridList>
             <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
@@ -29,8 +60,8 @@ class Home extends Component {
               <GridListTile key={movie.id} cols={0.5}>
                 <img src={movie.poster} alt={movie.title} onClick={() => this.viewDetails(movie.id)} />
                 <GridListTileBar
-                title={movie.title}
-                subtitle={movie.description}
+                  title={movie.title}
+                  subtitle={movie.description}
                 />
               </GridListTile>
             )}

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import "./EditMovie.css"
 //material-ui
-import { Button, TextField, FormControl, InputLabel, Select, MenuItem, } from "@material-ui/core";
-import Fab from '@material-ui/core/Fab';
+import { Button, TextField, FormControl, InputLabel, Select, MenuItem, Fab} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 

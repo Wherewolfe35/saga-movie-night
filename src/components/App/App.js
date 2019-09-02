@@ -6,6 +6,7 @@ import Home from "../Home/Home";
 import Header from "../Header/Header";
 import MovieDetails from "../MovieDetails/MovieDetails";
 import EditMovie from "../EditMovie/EditMovie";
+import PageShell from "../Page/PageShell";
 
 
 class App extends Component {
@@ -16,9 +17,9 @@ class App extends Component {
         <div className="App">
           <Header />
         </div>
-        <Route exact path='/' component={Home}/>
-        <Route path="/details/:id" component={MovieDetails} />
-        <Route path='/edit/:id' component={EditMovie}/>
+        <Route exact path='/' component={PageShell(Home)}/>
+        <Route path="/details/:id" component={PageShell(MovieDetails)} />
+        <Route path='/edit/:id' component={PageShell(EditMovie)}/>
       </Router>
     );
   }
