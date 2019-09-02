@@ -21,11 +21,16 @@ function* rootSaga() {
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
     try {
-        let response = yield axios.get('/movie');
-        console.log('from server', response.data);
+        let movieResponse = yield axios.get('/movie');
+        let genreResponse = yield axios.get('/genre');
+        console.log('add movies saga');
         yield put({
             type: 'SET_MOVIES',
-            payload: response.data
+            payload: movieResponse.data
+        })
+        yield put({
+            type: 'SET_GENRES',
+            payload: genreResponse.data
         })
     } catch(error) {
         console.log('error in getting movies', error);
@@ -93,20 +98,6 @@ const currentDetails = (state = '', action) => {
             return state;
     }
 }
-
-//used to store edit input from edit page
-// const editDetails = (state = {title: '', description: ''}, action) => {
-//     switch (action.type) {
-//         case 'SET_DETAILS':
-//             return {title: action.payload[0].title, description: action.payload[0].description};
-//         case 'EDIT_TITLE':
-//             return { ...state, title: action.payload };
-//         case 'EDIT_DESCRIPTION':
-//             return { ...state, description: action.payload };
-//         default:
-//             return state;
-//     }
-// }
 
 // Create one store that all components can use
 const storeInstance = createStore(
