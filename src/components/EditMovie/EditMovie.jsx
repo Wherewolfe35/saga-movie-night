@@ -9,7 +9,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 class EditMovie extends Component {
   state = {
-    genreToAdd: 1
+    genreToAdd: 1,
+    name: 'Adventure'
   }
   componentDidMount() {
     this.props.dispatch({
@@ -52,15 +53,28 @@ class EditMovie extends Component {
   genreChange = (event) => {
     console.log('Changing genres!');
     this.setState({
-      genreToAdd: event.target.value
+      genreToAdd: event.target.value.id,
+      name: event.target.value.name
     })
   }
+
+  addGenre = () => {
+    this.props.dispatch({
+      type: 'ADD_GENRE',
+      payload: {
+        genres_id: this.state.genreToAdd,
+        movies_id: this.props.match.params.id
+      }
+    })
+  }
+
   render() {
+    console.log(this.state);
     return (
       <>
       {this.props.details !== undefined && 
       <div>
-          <h1>Edit {this.props.details.title} {this.props.details.genres.map(genre => <span key={genre}>{genre} </span>)}</h1>
+          <h1>Edit {this.props.details.title} {this.props.details.genres.map(genre => <span key={genre}> {genre} </span>)}</h1>
           <TextField value={this.props.details.title} label="title" multiline
             id="standard-uncontrolled" rowsmax="1"
             onChange={(event) => this.inputChange(event, 'title')} placeholder='Movie Title' />
@@ -70,18 +84,18 @@ class EditMovie extends Component {
           <br /> <br />
           <FormControl className="formControl">
             <InputLabel color="inherit" htmlFor="age-simple">Genres</InputLabel>
-            <Select value={this.props.genreList}
+            <Select value={this.state.name}
               onChange={this.genreChange}
               inputProps={{
                 name: 'Genres',
                 id: 'age-simple',
               }}>{this.props.genreList.map(genre => 
-          <MenuItem key={genre.id} value={genre.id}>{genre.name}</MenuItem>)}
+          <MenuItem key={genre.id} value={genre}>{genre.name}</MenuItem>)}
           </Select>
-          </FormControl> 
+          </FormControl> <span>{this.state.name} </span>
           <Fab color="primary" aria-label="add" >
-            <AddIcon />
-          </Fab>
+            <AddIcon onClick={this.addGenre}/>
+          </Fab> <span> </span>
           <Fab aria-label="delete" >
             <DeleteIcon />
           </Fab><br /><br />
