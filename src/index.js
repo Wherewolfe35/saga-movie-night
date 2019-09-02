@@ -17,21 +17,29 @@ function* rootSaga() {
   yield takeEvery('ADD_MOVIES', addMovies);
   yield takeEvery('GET_DETAILS', allDetails);
   yield takeEvery('UPDATE_MOVIE', updateMovies);
+  yield takeEvery('ADD_GENRE', addGenre);
+  yield takeEvery('DELETE_GENRE', deleteGenre);
+  yield takeEvery('SEARCH_MOVIES', search);
 }
-
+//request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
     try {
-        let response = yield axios.get('/movie');
-        console.log('from server', response.data);
+        let movieResponse = yield axios.get('/movie');
+        let genreResponse = yield axios.get('/genre');
+        console.log('add movies saga');
         yield put({
             type: 'SET_MOVIES',
-            payload: response.data
+            payload: movieResponse.data
+        })
+        yield put({
+            type: 'SET_GENRES',
+            payload: genreResponse.data
         })
     } catch(error) {
         console.log('error in getting movies', error);
     }
 }
-
+//request to grab selected movie details and genres and place in appropriate reducers
 function* allDetails(action) {
     try {
         let response = yield axios.get(`/movie/${action.payload}`);
@@ -44,7 +52,7 @@ function* allDetails(action) {
         console.log('error in allDetails', error);
     }
 }
-
+//request to database to update title and description and then request the new information
 function* updateMovies(action) {
     try {
         yield axios.put(`/movie`, action.payload);
@@ -54,6 +62,43 @@ function* updateMovies(action) {
         })
     } catch (error) {
         console.log('error in updateMovies', error);
+    }
+}
+
+//request to add a genre to the selected move and then request updated movie details
+function* addGenre(action) {
+    try {
+        yield axios.post('/genre', action.payload);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.movies_id
+        })
+    } catch (error) {
+        console.log('error in addGenre', error);
+    }
+}
+
+function* deleteGenre(action) {
+    try {
+        yield axios.delete(`/genre/${action.payload.movies_id}/${action.payload.genres_id}`);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.movies_id
+        })
+    } catch(error) {
+        console.log('error in deleteGenre', error);
+    }
+}
+
+function* search(action) {
+    try {
+        let response = yield axios.get(`/movie?q=${action.payload}`);
+        yield put({
+            type: 'SET_MOVIES',
+            payload: response.data
+        })
+    } catch (error) {
+        console.log('error in search', error);
     }
 }
 
@@ -80,35 +125,15 @@ const genres = (state = [], action) => {
     }
 }
 
-//Used to store the current movie detail
-const currentMovie = (state = 0, action) => {
-    switch (action.type) {
-        case 'CURRENT_DETAIL':
-            return action.payload;
-        default:
-            return state;
-    }
-}
-
 //Used to store current details for the selected movie
 const currentDetails = (state = '', action) => {
     switch (action.type) {
         case 'SET_DETAILS':
             return action.payload;
-        default:
-            return state;
-    }
-}
-
-//used to store edit input from edit page
-const editDetails = (state = {title: '', description: ''}, action) => {
-    switch (action.type) {
-        case 'SET_DETAILS':
-            return {title: action.payload[0].title, description: action.payload[0].description};
         case 'EDIT_TITLE':
-            return { ...state, title: action.payload };
+            return [{ ...state[0], title: action.payload }];
         case 'EDIT_DESCRIPTION':
-            return { ...state, description: action.payload };
+            return [{ ...state[0], description: action.payload }];
         default:
             return state;
     }
@@ -119,9 +144,7 @@ const storeInstance = createStore(
     combineReducers({
         movies,
         genres,
-        currentMovie,
         currentDetails,
-        editDetails
     }),
     // Add sagaMiddleware to our store
     applyMiddleware(sagaMiddleware, logger),

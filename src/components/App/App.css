@@ -5,3 +5,30 @@
 h1 span {
   font-size: 10px;
 }
+
+header {
+  background-color: rgb(31, 31, 100);
+  color: rgb(250, 209, 120);
+}
+
+h1 {
+  margin: 10px;
+  padding: 20px;
+}
+
+body {
+  background-color: black;
+}
+
+.formControl {
+  min-width: 120px;
+}
+
+.searchBar {
+  background-color: rgb(155, 161, 211);
+  max-height: 46px;
+}
+
+.homeGrid img {
+  cursor: pointer;
+}
