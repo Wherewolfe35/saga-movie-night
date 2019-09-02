@@ -17,15 +17,22 @@ function* rootSaga() {
   yield takeEvery('ADD_MOVIES', addMovies);
   yield takeEvery('GET_DETAILS', allDetails);
   yield takeEvery('UPDATE_MOVIE', updateMovies);
+  yield takeEvery('ADD_GENRE', addGenre);
+  yield takeEvery('DELETE_GENRE', deleteGenre);
 }
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
     try {
-        let response = yield axios.get('/movie');
-        console.log('from server', response.data);
+        let movieResponse = yield axios.get('/movie');
+        let genreResponse = yield axios.get('/genre');
+        console.log('add movies saga');
         yield put({
             type: 'SET_MOVIES',
-            payload: response.data
+            payload: movieResponse.data
+        })
+        yield put({
+            type: 'SET_GENRES',
+            payload: genreResponse.data
         })
     } catch(error) {
         console.log('error in getting movies', error);
@@ -44,7 +51,7 @@ function* allDetails(action) {
         console.log('error in allDetails', error);
     }
 }
-//request to database to update title and description
+//request to database to update title and description and then request the new information
 function* updateMovies(action) {
     try {
         yield axios.put(`/movie`, action.payload);
@@ -54,6 +61,31 @@ function* updateMovies(action) {
         })
     } catch (error) {
         console.log('error in updateMovies', error);
+    }
+}
+
+//request to add a genre to the selected move and then request updated movie details
+function* addGenre(action) {
+    try {
+        yield axios.post('/genre', action.payload);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.movies_id
+        })
+    } catch (error) {
+        console.log('error in addGenre', error);
+    }
+}
+
+function* deleteGenre(action) {
+    try {
+        yield axios.delete(`/genre/${action.payload.movies_id}/${action.payload.genres_id}`);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.movies_id
+        })
+    } catch(error) {
+        console.log('error in deleteGenre', error);
     }
 }
 
@@ -93,20 +125,6 @@ const currentDetails = (state = '', action) => {
             return state;
     }
 }
-
-//used to store edit input from edit page
-// const editDetails = (state = {title: '', description: ''}, action) => {
-//     switch (action.type) {
-//         case 'SET_DETAILS':
-//             return {title: action.payload[0].title, description: action.payload[0].description};
-//         case 'EDIT_TITLE':
-//             return { ...state, title: action.payload };
-//         case 'EDIT_DESCRIPTION':
-//             return { ...state, description: action.payload };
-//         default:
-//             return state;
-//     }
-// }
 
 // Create one store that all components can use
 const storeInstance = createStore(
