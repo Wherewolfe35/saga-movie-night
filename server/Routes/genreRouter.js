@@ -32,4 +32,20 @@ router.post('/', (req, res) => {
   })
 })
 
+router.delete('/:mid/:gid', (req, res) => {
+  let movieId = req.params.mid;
+  let genreId = req.params.gid;
+  console.log('DELETEing genre', movieId, genreId);
+  let queryText = `DELETE FROM "genres_movies" WHERE "movies_id" = $1 AND "genres_id" = $2;`;
+  pool.query(queryText, [movieId, genreId])
+    .then((result) => {
+      console.log('successful DELETE to genres_movies');
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.log('error in DELETE', error);
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;

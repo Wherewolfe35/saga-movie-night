@@ -18,6 +18,7 @@ function* rootSaga() {
   yield takeEvery('GET_DETAILS', allDetails);
   yield takeEvery('UPDATE_MOVIE', updateMovies);
   yield takeEvery('ADD_GENRE', addGenre);
+  yield takeEvery('DELETE_GENRE', deleteGenre);
 }
 //request to grab all movies from movies table and store in movies reducer
 function* addMovies(action) {
@@ -73,6 +74,18 @@ function* addGenre(action) {
         })
     } catch (error) {
         console.log('error in addGenre', error);
+    }
+}
+
+function* deleteGenre(action) {
+    try {
+        yield axios.delete(`/genre/${action.payload.movies_id}/${action.payload.genres_id}`);
+        yield put({
+            type: 'GET_DETAILS',
+            payload: action.payload.movies_id
+        })
+    } catch(error) {
+        console.log('error in deleteGenre', error);
     }
 }
 
