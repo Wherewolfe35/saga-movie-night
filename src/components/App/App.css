@@ -23,3 +23,12 @@ body {
 .formControl {
   min-width: 120px;
 }
+
+.searchBar {
+  background-color: rgb(155, 161, 211);
+  max-height: 46px;
+}
+
+.homeGrid img {
+  cursor: pointer;
+}

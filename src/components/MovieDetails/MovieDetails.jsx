@@ -17,7 +17,7 @@ class MovieDetails extends Component {
       <section>{/* Using conditional rendering here because the page tries to load before current details is set. 
       I'm sure this can be fixed using saga, but not sure how*/}
         {this.props.currentDetails !== '' && this.props.currentDetails.map(details => <div key={details.id}>
-          <h1>{details.title} Details <span>{details.genres.map(genre => <span key={genre}> {genre}</span>)}
+          <h1>{details.title} Details <span>{details.genres.map(genre => <span key={genre}> {genre} &nbsp;</span>)}
           </span>
           </h1>
           <img src={details.poster} alt={details.title} />
