@@ -80,16 +80,6 @@ const genres = (state = [], action) => {
     }
 }
 
-//Used to store the current movie detail
-const currentMovie = (state = 0, action) => {
-    switch (action.type) {
-        case 'CURRENT_DETAIL':
-            return action.payload;
-        default:
-            return state;
-    }
-}
-
 //Used to store current details for the selected movie
 const currentDetails = (state = '', action) => {
     switch (action.type) {
@@ -123,7 +113,6 @@ const storeInstance = createStore(
     combineReducers({
         movies,
         genres,
-        currentMovie,
         currentDetails,
     }),
     // Add sagaMiddleware to our store

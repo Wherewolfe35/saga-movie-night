@@ -71,8 +71,8 @@ The edit page should have the buttons:
 
 As one of your last projects, it's possible you will be sharing this with employers, so be sure to follow best practices and make it look good!
 
-- [ ] Invest some time in styling it up!
-    - [ ] Research grids for you movie posters on the Movie List page
+- [X] Invest some time in styling it up!
+    - [X] Research grids for you movie posters on the Movie List page
     - [ ] Add route change animations
 - [X] Commit your code frequently! You should have at 15+ commits on a project of this size. Use branches to help break down your features.
 - [X] Comment your code.
