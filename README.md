@@ -50,7 +50,3 @@ The edit page allows a user to change the title, description, and genres of the 
 ## Authors
 
 Wherewolfe35
-
-## Stretch Goals
-
-- [ ] Create an `Admin` page. Add a link from the `Home` page to the `Admin` page. The page should initially display a login form (an input for username and an input for password). When the user enters the correct username (`camera`) and password (`action`), the page should display a form to add genres to the database, and a list of all of the genres with an `x` to remove them from the database. Note: This isn't actually secure, but it's pretty fun, and really good practice.
