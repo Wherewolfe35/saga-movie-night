@@ -38,8 +38,8 @@ router.get('/:id', (req, res) => {
   console.log('GETting details');
   let queryText = `SELECT "movies".id, "movies".title, "movies".poster, "movies".description, array_agg("genres".name) AS genres 
   FROM "movies"
-  JOIN "genres_movies" ON "genres_movies".movies_id = "movies".id
-  JOIN "genres" ON "genres".id = "genres_movies".genres_id
+  LEFT JOIN "genres_movies" ON "genres_movies".movies_id = "movies".id
+  LEFT JOIN "genres" ON "genres".id = "genres_movies".genres_id
   WHERE "movies".id = $1
   GROUP BY "movies".id;`;
   pool.query(queryText, [req.params.id])
