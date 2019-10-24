@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import "./EditMovie.css"
 //material-ui
-import { Button, TextField, FormControl, InputLabel, Select, MenuItem, Fab} from "@material-ui/core";
+import { Button, TextField, FormControl, InputLabel, Select, MenuItem, Fab,} from "@material-ui/core";
+import { withStyles } from '@material-ui/styles';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+const styles = theme => ({
+  dropdown: {
+    color: 'rgb(31, 31, 100)',
+    backgroundColor: 'black',
+    width: '150px',
+  }
+})
 
 class EditMovie extends Component {
   state = {
@@ -84,24 +93,26 @@ class EditMovie extends Component {
         {this.props.details !== undefined &&
           <div>
             <h1>Edit {this.props.details.title} {this.props.details.genres.map(genre => <span key={genre}> {genre} &nbsp;</span>)}</h1>
-            <TextField value={this.props.details.title} label="title" multiline
+            <TextField value={this.props.details.title} label="Title" multiline
               id="standard-uncontrolled" rowsmax="1"
               onChange={(event) => this.inputChange(event, 'title')} placeholder='Movie Title' />
-            <TextField value={this.props.details.description} label="description" multiline
+            <TextField value={this.props.details.description} label="Description" multiline
               id="standard-multiline-flexible" rowsmax="8" fullWidth
               onChange={(event) => this.inputChange(event, 'description')} placeholder='Movie Description' />
             <br /> <br />
             <FormControl className="formControl">
-              <InputLabel color="inherit" htmlFor="age-simple">Genres</InputLabel>
-              <Select value={this.state.name}
+              <InputLabel color="inherit" htmlFor="filled-age-simple">Genres</InputLabel>
+              <Select value={this.state.name} className={this.props.classes.dropdown}
                 onChange={this.genreChange}
                 inputProps={{
                   name: 'Genres',
-                  id: 'age-simple',
-                }}>{this.props.genreList.map(genre =>
+              }}><MenuItem value={this.state.name}>
+                <em>{this.state.name}</em>
+              </MenuItem>
+              {this.props.genreList.map(genre =>
                   <MenuItem key={genre.id} value={genre}>{genre.name}</MenuItem>)}
               </Select>
-            </FormControl> <span>{this.state.name} </span>
+            </FormControl>
             <Fab color="primary" aria-label="add" >
               <AddIcon onClick={() => this.addDelete('add')} />
             </Fab> <span> </span>
@@ -125,4 +136,4 @@ const storeToProps = (reduxStore) => {
   }
 }
 
-export default connect(storeToProps)(EditMovie);
+export default withStyles(styles)(connect(storeToProps)(EditMovie));
